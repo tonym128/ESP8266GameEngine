@@ -50,7 +50,7 @@ void gameLoop()
   // put your main code here, to run repeatedly:
   buttonVals = getReadShift();
 
-  if (flyGameLoop(&screenBuff, buttonVals))
+  if (myGameLoop(&screenBuff, buttonVals))
   {
     gameSetup();
   }

@@ -17,7 +17,7 @@ For Windows console build you will need cmake as well as Visual Studio and optio
 Console - Should require nothing additional.
 SDL - I found https://github.com/Microsoft/vcpkg invaluable, the example install is even for SDL2.
 
-For emscipten, there is only a build file currently, but if there's more demand I can clean this up.
+For emscipten, there is only a build command currently, but if there's more demand I can clean this up.
 ```emcc game.cpp gameCommon.cpp myGame.cpp myfont.cpp platform_core.cpp -s WASM=1 -std=c++0x -DOPENAL_FOUND -s USE_SDL=2 -O3 --profiling -o index.html -s ```
 
 There's no tests, tut - tut, but I did a lot of play testing :)

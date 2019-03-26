@@ -76,6 +76,7 @@ void displayNoise(ScreenBuff*, Dimensions dim, int);
 
 // Draw methods
 void drawObject(ScreenBuff*, Dimensions, const bool*);
+void drawObjectWrap(ScreenBuff*, Dimensions, const bool*);
 void drawObject(ScreenBuff*, Dimensions, bool*, bool = true);
 void drawObjectFill(ScreenBuff*, Dimensions, const bool*, bool);
 void drawObjectWavy(ScreenBuff*, Dimensions, int, int, int, int, bool, const bool*);

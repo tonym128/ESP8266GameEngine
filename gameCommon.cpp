@@ -174,6 +174,20 @@ void drawObject(ScreenBuff *screenBuff, Dimensions dim, const bool *objectArray)
 	}
 }
 
+void drawObjectWrap(ScreenBuff *screenBuff, Dimensions dim, const bool *objectArray)
+{
+	int counter = 0;
+	for (int j = dim.y; j < dim.y + dim.height; j++)
+	{
+		for (int i = dim.x; i < dim.x + dim.width; i++)
+		{
+			int pixel = i%screenBuff->WIDTH + screenBuff->WIDTH * (j%screenBuff->HEIGHT);
+			if (objectArray[counter]) screenBuff->consoleBuffer[pixel] = 1;
+			counter++;
+		}
+	}
+}
+
 void drawObjectWavy(ScreenBuff *screenBuff, Dimensions dim, int ylow, int yhigh, int ystart, int frameCount, bool yup, const bool *objectArray)
 {
 	if (ystart > yhigh)
@@ -453,7 +467,6 @@ double currentFPS()
 		averageFPS /= fpsItems;
 
 	return FIXP_TO_FLOAT(averageFPS);
-	;
 }
 
 void calcFPS()
