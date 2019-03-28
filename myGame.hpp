@@ -16,8 +16,9 @@ struct Player1Keys {
 
 struct Player {
   Dimensions dim;
-  int animation = 0;
-  int frame = 0;
+  FIXPOINT thrust,direction,size;
+  FIXPOINT fixX,fixY, movX, movY;
+  double rotation;
   bool inPlay = true;
 };
 
@@ -33,17 +34,23 @@ struct Fire {
   Dimensions dim;
   FIXPOINT speed;
   FIXPOINT direction;
+  int life;
 };
 
+static const int ASTEROIDS =  90;
+
 struct GameState {
+  int hiScore = 0;
+  int score = 0;
+  int level = 1;
+
   int scene = 0;
   int lastscene = -1;
   int frameCounter = 0;
-  int level = 1;
 
   Player1Keys p1keys;
   Player player1;
-  Asteroid asteroids[10];
+  Asteroid asteroids[ASTEROIDS];
 
   bool running = true;
   bool restart = false;
@@ -110,15 +117,15 @@ const static bool Alien10x10[100] = {
 
 const static bool Ship10x10[100] = {
   0,0,0,0,1,1,0,0,0,0,
-  0,0,0,1,1,1,1,0,0,0,
-  0,0,1,1,0,0,1,1,0,0,
+  0,0,1,1,1,1,1,1,0,0,
+  0,0,1,1,1,1,1,1,0,0,
+  0,0,1,1,0,0,1,1,1,0,
+  0,1,1,1,0,0,1,1,1,0,
+  0,1,1,1,1,1,1,1,1,0,
+  0,1,1,1,1,1,1,1,1,0,
   0,1,1,0,0,0,0,1,1,0,
-  1,1,1,1,0,0,1,1,1,1,
-  1,1,1,1,1,1,1,1,1,1,
-  0,1,1,1,1,1,1,1,1,0,
-  0,1,1,1,1,1,1,1,1,0,
-  1,1,1,0,0,0,0,1,1,1,
-  1,0,1,0,0,0,0,1,0,1
+  0,1,1,0,0,0,0,1,1,0,
+  0,0,0,0,0,0,0,0,0,0
 };
 
 #endif

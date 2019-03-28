@@ -60,52 +60,53 @@ void displayNoise(ScreenBuff *screenBuff, Dimensions dim, int amountInverse = 0)
 }
 
 FIXPOINT xVec(FIXPOINT speed, FIXPOINT direction) {
-	if (direction == INT_TO_FIXP(270) || direction == INT_TO_FIXP(90)) return speed;
-	if (direction == INT_TO_FIXP(0) || direction == INT_TO_FIXP(270)) return 0;
+	if (direction == INT_TO_FIXP(90)) return speed;
+	if (direction == INT_TO_FIXP(270)) return -speed;
+	
+	if (direction == INT_TO_FIXP(0) || direction == INT_TO_FIXP(180)) return 0;
+	int sign = 1;
 
-	else if (direction < INT_TO_FIXP(90)) {
-		// X Value is +'ve
-	} 
+	if (direction < INT_TO_FIXP(90)) {
+	}
 	else if (direction < INT_TO_FIXP(180)) {
 		direction = direction - INT_TO_FIXP(90);
 	}
 	else if (direction < INT_TO_FIXP(270)) {
 		// X Value is -'ve
 		direction = direction - INT_TO_FIXP(180);
-		direction = FIXP_MULT(direction,INT_TO_FIXP(-1));
+		sign = -1;
 	}
 	else {
 		// X Value is -'ve
 		direction = direction - INT_TO_FIXP(270);
-		direction = FIXP_MULT(direction,INT_TO_FIXP(-1));
+		sign = -1;
 	}
 
-	return FIXP_MULT(speed,FIXP_DIV(direction, INT_TO_FIXP(90)));
+	return FIXP_MULT(speed*sign,FIXP_DIV(direction, INT_TO_FIXP(90)));
 }
 
 FIXPOINT yVec(FIXPOINT speed, FIXPOINT direction) {
-	if (direction == INT_TO_FIXP(270) || direction == INT_TO_FIXP(90)) return 0;
-	if (direction == INT_TO_FIXP(0) || direction == INT_TO_FIXP(270)) return speed;
+	if (direction == INT_TO_FIXP(90) || direction == INT_TO_FIXP(270)) return 0;
+	
+	if (direction == INT_TO_FIXP(0)) return -speed; 
+	if (direction == INT_TO_FIXP(180)) return speed;
+	int sign = 1;
 
-	else if (direction < INT_TO_FIXP(90)) {
-		// Y Value is -'ve
-		direction = FIXP_MULT(direction,INT_TO_FIXP(-1));
-	} 
+	if (direction < INT_TO_FIXP(90)) {
+		sign = -1;
+	}
 	else if (direction < INT_TO_FIXP(180)) {
-		// Y Value is +'ve
 		direction = direction - INT_TO_FIXP(90);
 	}
 	else if (direction < INT_TO_FIXP(270)) {
-		// Y Value is +'ve
 		direction = direction - INT_TO_FIXP(180);
 	}
 	else {
-		// Y Value is -'ve
 		direction = direction - INT_TO_FIXP(270);
-		direction = FIXP_MULT(direction,INT_TO_FIXP(-1));
+		sign = -1;
 	}
-
-	return FIXP_MULT(speed,FIXP_DIV(INT_TO_FIXP(90)-direction, INT_TO_FIXP(90)));
+	
+	return FIXP_MULT(speed*sign,FIXP_DIV(INT_TO_FIXP(90)-direction, INT_TO_FIXP(90)));
 }
 
 void rotateObject(Dimensions dim, double angle, double zoom, const bool *object, bool *rotated)
