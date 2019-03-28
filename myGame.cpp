@@ -40,7 +40,7 @@ bool displayScroller(GameState *gameState, ScreenBuff *screenBuff)
 	strcpy(scrollerText[5], "  Or Asteroid  ");
 	strcpy(scrollerText[6], "   Good Luck!  ");
 	strcpy(scrollerText[7], "");
-	strcpy(scrollerText[8], " -= Asteroid =-  ");
+	strcpy(scrollerText[8], " -= Asteroid =- ");
 
 	return drawScroller(screenBuff, gameState->frameCounter, scrollerText);
 }
@@ -84,13 +84,54 @@ void processAttractMode(GameState *gameState, ScreenBuff *screenBuff)
 	}
 }
 
-void updateAttractMode(GameState *gameState, ScreenBuff *screenBuff)
-{
-	// Draw some asteroids floating in the background
-	gameState->asteroids[0].dim.x = gameState->asteroids[0].dim.x % screenBuff->WIDTH + 1;
-	gameState->asteroids[0].dim.y = gameState->asteroids[0].dim.y % screenBuff->HEIGHT + 1;
+void initAttractMode(GameState *gameState) {
+	gameState->asteroids[0].speed= FLOAT_TO_FIXP(1);
+	gameState->asteroids[0].size= FLOAT_TO_FIXP(20);
+	gameState->asteroids[0].direction = INT_TO_FIXP(135);
+	gameState->asteroids[0].rotateAmount = 2000;
 	gameState->asteroids[0].dim.width = 20;
 	gameState->asteroids[0].dim.height = 20;
+
+	gameState->asteroids[1].speed= FLOAT_TO_FIXP(0.5);
+	gameState->asteroids[1].size= FLOAT_TO_FIXP(10);
+	gameState->asteroids[1].direction = INT_TO_FIXP(68);
+	gameState->asteroids[1].rotateAmount = 1000;
+	gameState->asteroids[1].dim.width = 10;
+	gameState->asteroids[1].dim.height = 10;
+
+	gameState->asteroids[2].speed= FLOAT_TO_FIXP(0.5);
+	gameState->asteroids[2].size= FLOAT_TO_FIXP(5);
+	gameState->asteroids[2].direction = INT_TO_FIXP(245);
+	gameState->asteroids[2].rotateAmount = 500;
+	gameState->asteroids[2].dim.width = 5;
+	gameState->asteroids[2].dim.height = 5;
+
+	gameState->asteroids[3].speed= FLOAT_TO_FIXP(0.5);
+	gameState->asteroids[3].size= FLOAT_TO_FIXP(10);
+	gameState->asteroids[3].direction = INT_TO_FIXP(38);
+	gameState->asteroids[3].rotateAmount = 500;
+	gameState->asteroids[3].dim.width = 10;
+	gameState->asteroids[3].dim.height = 10;
+}
+
+void updateAttractMode(GameState *gameState, ScreenBuff *screenBuff)
+{
+
+	// Draw some asteroids floating in the background
+	for (int i = 0; i < 10; i++) {
+		gameState->asteroids[i].fixX += xVec(gameState->asteroids[i].speed,gameState->asteroids[i].direction);
+		gameState->asteroids[i].fixY += yVec(gameState->asteroids[i].speed,gameState->asteroids[i].direction);
+
+		if (gameState->asteroids[i].fixX < INT_TO_FIXP(0)) gameState->asteroids[i].fixX += INT_TO_FIXP(screenBuff->WIDTH);
+		if (gameState->asteroids[i].fixX > INT_TO_FIXP(screenBuff->WIDTH)) gameState->asteroids[i].fixX -= INT_TO_FIXP(screenBuff->WIDTH);
+
+		if (gameState->asteroids[i].fixY < INT_TO_FIXP(0)) gameState->asteroids[i].fixY += INT_TO_FIXP(screenBuff->HEIGHT);
+		if (gameState->asteroids[i].fixY > INT_TO_FIXP(screenBuff->HEIGHT)) gameState->asteroids[i].fixY -= INT_TO_FIXP(screenBuff->HEIGHT);
+
+		gameState->asteroids[i].dim.x = FIXP_TO_INT(gameState->asteroids[i].fixX) % screenBuff->WIDTH;
+		gameState->asteroids[i].dim.y = FIXP_TO_INT(gameState->asteroids[i].fixY) % screenBuff->HEIGHT;
+		gameState->asteroids[i].rotation = ((double)getTimeInMillis()) / gameState->asteroids[i].rotateAmount;
+	}
 }
 
 void displayAttractMode(GameState *gameState, ScreenBuff *screenBuff)
@@ -99,7 +140,23 @@ void displayAttractMode(GameState *gameState, ScreenBuff *screenBuff)
 	displayClear(screenBuff,1,false);
 	
 	//Draw asteroids
-	drawObjectWrap(screenBuff,gameState->asteroids[0].dim ,Asteroid20x20);
+	bool rotAst[400];
+	for (int i = 0; i < 10; i++) {
+		if (gameState->asteroids[i].dim.height > 0) {
+			switch (gameState->asteroids[i].dim.height) {
+				case 20 :
+					rotateObject(gameState->asteroids[i].dim,gameState->asteroids[i].rotation,1, Asteroid20x20, rotAst);
+					break;
+				case 10 : 
+					rotateObject(gameState->asteroids[i].dim,gameState->asteroids[i].rotation,1, Asteroid10x10, rotAst);
+					break;
+				case 5 : 
+					rotateObject(gameState->asteroids[i].dim,gameState->asteroids[i].rotation,1, Asteroid5x5, rotAst);
+					break;
+			} 
+			drawObjectWrap(screenBuff,gameState->asteroids[i].dim , rotAst);
+		}
+	}
 
 	// Alternate press button text on and off every second
 	if (getTimeInMillis() / 1000 % 2 == 0) {
@@ -120,11 +177,7 @@ bool myGameLoop(ScreenBuff *screenBuff, byte buttonVals)
 		if (gameState.lastscene != gameState.scene)
 		{
 			gameState.lastscene = gameState.scene;
-			gameState.frameCounter = 0;
-
-			gameState.asteroids[0].dim.height = 20;
-			gameState.asteroids[0].dim.width = 20;
-			
+			initAttractMode(&gameState);
 		}
 
 

@@ -23,10 +23,10 @@ struct Player {
 
 struct Asteroid {
   Dimensions dim;
-  FIXPOINT speed;
-  FIXPOINT direction;
-  int x[5];
-  int y[5];
+  FIXPOINT speed,direction,size;
+  FIXPOINT fixX,fixY;
+  double rotateAmount;
+  double rotation;
 };
 
 struct Fire {
@@ -37,7 +37,7 @@ struct Fire {
 
 struct GameState {
   int scene = 0;
-  int lastscene = 0;
+  int lastscene = -1;
   int frameCounter = 0;
   int level = 1;
 
@@ -75,16 +75,16 @@ const static bool Asteroid20x20[400] = {
 };
 
 const static bool Asteroid10x10[100] = {
-  0,0,0,0,1,1,0,0,0,0,
+  0,0,0,1,1,1,0,0,0,0,
   0,0,0,1,1,1,1,0,0,0,
-  0,0,0,1,1,1,1,0,0,0,
-  0,1,0,0,1,1,0,0,1,0,
-  1,1,1,0,0,0,0,1,1,1,
-  1,1,1,1,1,1,1,1,1,1,
+  0,0,1,1,1,1,1,1,0,0,
+  0,1,1,1,1,1,0,1,1,0,
+  1,1,1,0,1,1,1,1,1,1,
+  1,1,1,1,1,1,1,0,1,1,
   1,1,1,1,1,1,1,1,1,1,
   0,1,0,1,0,0,1,0,1,0,
-  0,0,1,1,1,1,1,1,0,0,
-  0,0,0,1,1,1,1,0,0,0
+  1,1,1,1,1,1,1,1,0,0,
+  1,1,0,1,1,1,1,0,0,0
 };
 
 const static bool Asteroid5x5[25] = {

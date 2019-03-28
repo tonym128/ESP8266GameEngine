@@ -85,8 +85,11 @@ void reverseObject(Dimensions, const bool*, bool*);
 void invertObject(Dimensions, const bool*, bool*);
 void flipObject(Dimensions, const bool*, bool*);
 void copyObject(Dimensions, const bool*, bool*);
-
 bool drawScroller(ScreenBuff*, int, char[9][17]);
+
+// Math
+FIXPOINT xVec(FIXPOINT, FIXPOINT);
+FIXPOINT yVec(FIXPOINT, FIXPOINT);
 
 static inline void drawVertLine2(ScreenBuff *screenBuff, int x, int y1, int y2, bool colour) {
 	if (y1<0) y1 = 0;
