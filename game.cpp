@@ -1,4 +1,4 @@
-#define FPS 1
+// #define FPS 1
 #define ANALOG 1
 // #define AUDIO 1
 
