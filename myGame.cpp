@@ -22,7 +22,9 @@ void processInput(GameState *gameState, byte buttonVals)
 void resetGameState(GameState *gameState, ScreenBuff *screenBuff)
 {
 	srand (time(NULL));
-	gameState->hiScore = 0;
+	gameState->player1.collision = false;
+	gameState->player1.inPlay = true;
+
 	gameState->score = 0;
 	gameState->level = 1;
 
@@ -36,6 +38,39 @@ void resetGameState(GameState *gameState, ScreenBuff *screenBuff)
 
 	gameState->player1.fixX = INT_TO_FIXP(gameState->player1.dim.x);
 	gameState->player1.fixY = INT_TO_FIXP(gameState->player1.dim.y);
+	gameState->player1.movX = INT_TO_FIXP(0);
+	gameState->player1.movY = INT_TO_FIXP(0);
+}
+
+void startLevel(GameState *gameState, ScreenBuff *screenBuff) {
+	// Initialise player
+	gameState->player1.thrust = FLOAT_TO_FIXP(0.05 + gameState->level / (double)100);
+	gameState->player1.direction = 0;
+	gameState->player1.dim.x = screenBuff->WIDTH/2;
+	gameState->player1.dim.y = screenBuff->HEIGHT/2;
+
+	gameState->player1.fixX = INT_TO_FIXP(gameState->player1.dim.x);
+	gameState->player1.fixY = INT_TO_FIXP(gameState->player1.dim.y);
+
+	gameState->player1.movX = INT_TO_FIXP(0);
+	gameState->player1.movY = INT_TO_FIXP(0);
+
+	// 1 Asteroid per stage
+	for (int i = 0; i < ASTEROIDS; i++) {
+		gameState->asteroids[i].dim.width = 0;
+		gameState->asteroids[i].dim.height = 0;	
+	}
+
+	for (int i = 0; i < gameState->level; i++) {
+		int size = 20;
+		gameState->asteroids[i].speed= FLOAT_TO_FIXP((double)(rand() % 10)/(double)10);
+		gameState->asteroids[i].size= FLOAT_TO_FIXP(size);
+		gameState->asteroids[i].direction = INT_TO_FIXP(rand() % 360);
+		gameState->asteroids[i].rotateAmount = rand() % 4000;
+		gameState->asteroids[i].dim.width = size;
+		gameState->asteroids[i].dim.height = size;
+	}
+
 }
 
 bool updateScroller(GameState *gameState, ScreenBuff *screenBuff)
@@ -116,7 +151,7 @@ void updateGame(GameState *gameState, ScreenBuff *screenBuff)
 	gameState->player1.dim.x = FIXP_TO_INT(gameState->player1.fixX) % screenBuff->WIDTH;
 	gameState->player1.dim.y = FIXP_TO_INT(gameState->player1.fixY) % screenBuff->HEIGHT;
 
-	// Draw the Asteroids
+	// Update the Asteroids
 	for (int i = 0; i < ASTEROIDS; i++) {
 		if (gameState->asteroids[i].dim.width) {
 			gameState->asteroids[i].fixX += xVec(gameState->asteroids[i].speed,gameState->asteroids[i].direction);
@@ -132,6 +167,43 @@ void updateGame(GameState *gameState, ScreenBuff *screenBuff)
 			gameState->asteroids[i].dim.y = FIXP_TO_INT(gameState->asteroids[i].fixY) % screenBuff->HEIGHT;
 			gameState->asteroids[i].rotation = ((double)getTimeInMillis()) / gameState->asteroids[i].rotateAmount;
 		}
+	}
+
+	// Collision detect ship vs Asteroids
+	bool rotShip[100];
+	rotateObject(gameState->player1.dim,gameState->player1.rotation,1, Ship10x10, rotShip);
+	for (int i = 0; i < ASTEROIDS; i++) {
+		if (gameState->player1.collision) break;
+		// If it's a valid asteroid
+		if (gameState->asteroids[i].dim.width) {
+			// If we have a collision on the bounding box
+			bool rotAst[400];
+			if (rectCollisionCheck(gameState->player1.dim, gameState->asteroids[i].dim))
+			{
+				//Do a mask collision check
+				switch (gameState->asteroids[i].dim.height) {
+					case 20 :
+						rotateObject(gameState->asteroids[i].dim,gameState->asteroids[i].rotation,1, Asteroid20x20, rotAst);
+						break;
+					case 10 : 
+						rotateObject(gameState->asteroids[i].dim,gameState->asteroids[i].rotation,1, Asteroid10x10, rotAst);
+						break;
+					case 5 : 
+						rotateObject(gameState->asteroids[i].dim,gameState->asteroids[i].rotation,1, Asteroid5x5, rotAst);
+						break;
+				}
+				
+				if (maskCollisionCheck(gameState->player1.dim, gameState->asteroids[i].dim, rotShip, rotAst)) {
+						gameState->player1.collision = true;
+				}
+			}
+		}	
+	}
+
+	// Collider Check
+	if (gameState->player1.collision) {
+		gameState->player1.inPlay = false;
+		gameState->scene = 0;
 	}
 }
 
@@ -163,7 +235,6 @@ void displayGame(GameState *gameState, ScreenBuff *screenBuff)
 			drawObjectWrap(screenBuff,gameState->asteroids[i].dim , rotAst);
 		}
 	}
-
 }
 
 void processAttractMode(GameState *gameState, ScreenBuff *screenBuff)
@@ -176,7 +247,7 @@ void processAttractMode(GameState *gameState, ScreenBuff *screenBuff)
 }
 
 void initAttractMode(GameState *gameState) {
-	for (int i = 0; i < 10; i++) {
+	for (int i = 0; i < ASTEROIDS; i++) {
 		gameState->asteroids[i].dim.width = 0;
 		gameState->asteroids[i].dim.height = 0;
 	}
@@ -281,6 +352,7 @@ bool myGameLoop(ScreenBuff *screenBuff, byte buttonVals)
 		{
 			gameState.lastscene = gameState.scene;
 			gameState.frameCounter = 0;
+			resetGameState(&gameState, screenBuff);
 		}
 
 		updateScroller(&gameState, screenBuff);
@@ -294,7 +366,7 @@ bool myGameLoop(ScreenBuff *screenBuff, byte buttonVals)
 		if (gameState.lastscene != gameState.scene)
 		{
 			gameState.lastscene = gameState.scene;
-			resetGameState(&gameState, screenBuff);
+			startLevel(&gameState, screenBuff);
 		}
 
 		updateGame(&gameState, screenBuff);
