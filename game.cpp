@@ -18,20 +18,6 @@ byte buttonVals;
 #include "platform/arduino.h"
 #endif
 
-void showLogo(const bool logo[])
-{
-  Dimensions dim;
-  dim.height = logo_height;
-  dim.width = logo_width;
-  dim.x = 0;
-  dim.y = 0;
-
-  drawObject(&screenBuff, dim, logo);
-  initTime();
-  sendToScreen();
-  updateMinTime(2000);
-}
-
 void audioSetup()
 {
   audioInit();
@@ -39,8 +25,9 @@ void audioSetup()
 
 void gameSetup()
 {
-  showLogo(logo_image);
-  //gameInit();
+  showLogo(logo_image, &screenBuff);
+  sendToScreen();
+  updateMinTime(2000);
 }
 
 void gameLoop()

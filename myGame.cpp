@@ -464,6 +464,16 @@ bool myGameLoop(ScreenBuff *screenBuff, byte buttonVals)
 
 	switch (gameState.scene)
 	{
+	case -1: // Load Screen
+		if (gameState.lastscene != gameState.scene)
+		{
+			gameState.lastscene = gameState.scene;
+			showLogo(mygame_image, screenBuff);
+		} else {
+			updateMinTime(2000);
+			gameState.scene++;
+		}
+		break;
 	case 0: // Attract screen
 		if (gameState.lastscene != gameState.scene)
 		{

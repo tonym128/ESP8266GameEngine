@@ -590,3 +590,16 @@ int getElapsedSeconds()
 {
 	return (int)(currentTime - startTime) / 1000;
 }
+
+void showLogo(const bool logo[],ScreenBuff *screenBuff)
+{
+  Dimensions dim;
+  dim.height = logo_height;
+  dim.width = logo_width;
+  dim.x = 0;
+  dim.y = 0;
+  
+  displayClear(screenBuff,0,false);
+  drawObject(screenBuff, dim, logo);
+  initTime();
+}

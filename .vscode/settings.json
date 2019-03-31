@@ -55,6 +55,7 @@
         "cwctype": "cpp",
         "fstream": "cpp",
         "sstream": "cpp",
-        "map": "cpp"
+        "map": "cpp",
+        "optional": "cpp"
     }
 }

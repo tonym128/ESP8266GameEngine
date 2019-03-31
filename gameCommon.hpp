@@ -119,4 +119,6 @@ void updateMinTime(unsigned int);
 bool checkTime(unsigned int);
 int getElapsedSeconds();
 
+void showLogo(const bool[], ScreenBuff*);
+
 #endif // !GAMECOMMON_H
