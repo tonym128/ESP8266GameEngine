@@ -109,7 +109,7 @@ void drawMoire(ScreenBuff*, Dimensions, bool);
 void drawCharacter(ScreenBuff*, char, int, int, bool = true);
 void drawString(ScreenBuff*, char*, int, int, bool = true);
 
-void getCurrentFPS();
+FIXPOINT getCurrentFPS();
 void calcFPS();
 void drawFPS(ScreenBuff*);
 

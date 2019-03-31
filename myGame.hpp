@@ -5,7 +5,8 @@
 #include "gameCommon.hpp"
 #endif
 
-static const int FIRECOUNT = 1;
+static const int FIRECOUNT = 5;
+static const int FIREPACING = 100;
 static const FIXPOINT FIREPOWER = INT_TO_FIXP(1);
 static const int ASTEROIDS =  90;
 
@@ -33,6 +34,7 @@ struct Player {
   bool collision = 0;
   bool inPlay = true;
   Fire fire[FIRECOUNT];
+  long firetimeout = getTimeInMillis()+FIREPACING;
 };
 
 struct Asteroid {
@@ -49,7 +51,7 @@ struct GameState {
   int score = 0;
   int level = 1;
 
-  int scene = -1;
+  int scene = 3;
   int lastscene = -99;
   int frameCounter = 0;
 
