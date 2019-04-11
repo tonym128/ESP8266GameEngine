@@ -22,6 +22,15 @@ bool readAnalogSensor(int pin)
   return inputVal > 20;
 }
 
+int readAnalogSensorRaw(int pint) {
+  digitalWrite(pin, HIGH);
+
+  inputVal = analogRead(A0);
+
+  digitalWrite(pin, LOW);
+  return inputVal;
+}
+
 byte getReadShiftAnalog()
 {
   byte buttonVals = 0;
@@ -83,6 +92,38 @@ byte getReadShiftDigital()
   }
 
   return buttonVals;
+}
+
+std::array<int,8> getRawInput() {
+  std::array<int,8> rawValues;
+#ifdef ANALOG
+  int i = 0;
+  rawValues[i++] = readAnalogSensorRaw(D6); // Left
+  rawValues[i++] = readAnalogSensorRaw(D8); // Up
+  rawValues[i++] = readAnalogSensorRaw(D7); // Right
+  rawValues[i++] = readAnalogSensorRaw(D5); // Down
+  rawValues[i++] = readAnalogSensorRaw(D2); // B
+  rawValues[i++] = 0; // Missing
+  rawValues[i++] = readAnalogSensorRaw(D3); // A
+  rawValues[i++] = 0; // Missing
+#else
+  int inputPin = 1;
+  int buttonPressedVal = 1; //Depending on how buttons are wired
+  digitalWrite(pinStcp, LOW);
+  delayMicroseconds(20);
+  digitalWrite(pinStcp, HIGH);
+
+  byte buttonVals = 0;
+  for (int i = 0; i < 8; i++)
+  {
+    digitalWrite(pinShcp, LOW);
+    delayMicroseconds(20);
+    inputPin = digitalRead(pinDataIn);
+    rawValues[i] = inputPin == buttonPressedVal ? 1 : 0;
+    digitalWrite(pinShcp, HIGH);
+  }
+#endif
+  return rawValues;
 }
 
 byte getReadShift()

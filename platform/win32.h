@@ -50,6 +50,20 @@ byte getReadShift()
   return buttonVals;
 }
 
+std::array<int,8> getRawInput() {
+  std::array<int,8> rawValues;
+  int i = 0;
+  rawValues[i++] = processWinKey(VK_LEFT); // Left
+  rawValues[i++] = processWinKey(VK_UP); // Up
+  rawValues[i++] = processWinKey(VK_RIGHT); // Right
+  rawValues[i++] = processWinKey(VK_DOWN); // Down
+  rawValues[i++] = processWinKey('S'); // B
+  rawValues[i++] = processWinKey('A'); // B
+  rawValues[i++] = processWinKey('W'); // B
+  rawValues[i++] = processWinKey('D'); // A
+  return rawValues;
+}
+
 void sendToScreen()
 {
   // Write the display

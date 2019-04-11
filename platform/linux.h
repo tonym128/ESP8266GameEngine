@@ -36,6 +36,40 @@ byte getReadShift() {
 	return buttonVals;
 }
 
+std::array<int,8> getRawInput() {
+  std::array<int,8> rawValues;
+  int i = 0;
+
+ 	switch(getch()) {
+	case 68:    // key left
+		rawValues[0] = 1;
+		break;
+	case 65:    // key up
+		rawValues[1] = 1;
+		break;
+	case 67:    // key right
+		rawValues[2] = 1;
+		break;
+	case 66:    // key down
+		rawValues[3] = 1;
+		break;
+	case 'd':
+		rawValues[4] = 1;
+		break;
+	case 's':
+		rawValues[5] = 1;
+		break;
+	case 'a':
+		rawValues[6] = 1;
+		break;
+	case 'w':
+		rawValues[7] = 1;
+		break;
+	}
+
+	return rawValues;
+}
+
 void sendToScreen() {
   for (int i = 0; i < screenBuff.WIDTH * screenBuff.HEIGHT; i++) {
 	  int x = i % screenBuff.WIDTH;

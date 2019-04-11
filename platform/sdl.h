@@ -39,6 +39,31 @@ byte getReadShift()
 	return buttonVals;
 }
 
+std::array<int,8> getRawInput() {
+    std::array<int, 8> rawValues;
+
+	SDL_PumpEvents();
+	const Uint8 *keystate = SDL_GetKeyboardState(NULL);
+	if (keystate[SDL_SCANCODE_UP])
+		rawValues[0] = 1;
+	if (keystate[SDL_SCANCODE_DOWN])
+		rawValues[1] = 1;
+	if (keystate[SDL_SCANCODE_LEFT])
+		rawValues[2] = 1;
+	if (keystate[SDL_SCANCODE_RIGHT])
+		rawValues[3] = 1;
+	if (keystate[SDL_SCANCODE_W])
+		rawValues[4] = 1;
+	if (keystate[SDL_SCANCODE_A])
+		rawValues[5] = 1;
+	if (keystate[SDL_SCANCODE_S])
+		rawValues[6] = 1;
+	if (keystate[SDL_SCANCODE_D])
+		rawValues[7] = 1;
+
+	return rawValues;
+}
+
 void sendToScreen()
 {
 	SDL_SetRenderDrawColor(renderer, 0, 0, 0, 0);

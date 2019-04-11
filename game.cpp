@@ -1,10 +1,12 @@
 // #define FPS 1
 #define ANALOG 1
 // #define AUDIO 1
+#define DEBUG_OUTPUT
 
 #include "game.hpp"
 ScreenBuff screenBuff;
 byte buttonVals;
+std::array<int,8> buttonRaw;
 
 #ifdef __EMSCRIPTEN__
 #include "platform/plat_emscripten.h"
@@ -46,7 +48,14 @@ void gameLoop()
 #ifdef FPS // Define this to show the FPS for the game
   drawFPS(&screenBuff);
 #endif
-
+#ifdef DEBUG_OUTPUT
+	std::array<int,8> rawValues = getRawInput();
+  for(int i = 0; i < 8; i++) {
+    	char fpsString[17];
+    	sprintf(fpsString, "%d:%03d", i, rawValues[i]);
+    	drawString(&screenBuff, fpsString, 0, i * 8, true);
+  }
+#endif
   sendToScreen();
   updateMinTime(33);
 }

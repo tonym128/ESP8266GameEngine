@@ -21,6 +21,7 @@
 #include <stdlib.h>
 #include <time.h>
 #include <vector>
+#include <array>
 
 #ifndef MYFONT_H_
 #include "myfont.hpp"
