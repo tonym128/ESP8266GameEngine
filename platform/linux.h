@@ -39,7 +39,10 @@ byte getReadShift() {
 std::array<int,8> getRawInput() {
   std::array<int,8> rawValues;
   int i = 0;
-
+	for (int i = 0; i < 8; i++) {
+		rawValues[i] = 0;
+	}
+	
  	switch(getch()) {
 	case 68:    // key left
 		rawValues[0] = 1;

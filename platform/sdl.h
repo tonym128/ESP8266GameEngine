@@ -40,7 +40,10 @@ byte getReadShift()
 }
 
 std::array<int,8> getRawInput() {
-    std::array<int, 8> rawValues;
+  std::array<int, 8> rawValues;
+	for (int i = 0; i < 8; i++) {
+		rawValues[i] = 0;
+	}
 
 	SDL_PumpEvents();
 	const Uint8 *keystate = SDL_GetKeyboardState(NULL);

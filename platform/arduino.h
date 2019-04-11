@@ -96,6 +96,10 @@ byte getReadShiftDigital()
 
 std::array<int,8> getRawInput() {
   std::array<int,8> rawValues;
+	for (int i = 0; i < 8; i++) {
+		rawValues[i] = 0;
+	}
+
 #ifdef ANALOG
   int i = 0;
   rawValues[i++] = readAnalogSensorRaw(D6); // Left

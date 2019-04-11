@@ -52,6 +52,10 @@ byte getReadShift()
 
 std::array<int,8> getRawInput() {
   std::array<int,8> rawValues;
+	for (int i = 0; i < 8; i++) {
+		rawValues[i] = 0;
+	}
+
   int i = 0;
   rawValues[i++] = processWinKey(VK_LEFT); // Left
   rawValues[i++] = processWinKey(VK_UP); // Up
