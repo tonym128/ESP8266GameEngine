@@ -50,10 +50,10 @@ void gameLoop()
 #endif
 #ifdef DEBUG_OUTPUT
 	std::array<int,8> rawValues = getRawInput();
-  for(int i = 0; i < 8; i++) {
+  for(int i = 0; i < 8; i+=2) {
     	char fpsString[17];
-    	sprintf(fpsString, "%d:%03d", i, rawValues[i]);
-    	drawString(&screenBuff, fpsString, 0, i * 8, true);
+    	sprintf(fpsString, "%d:%03d %d:%03d", i, rawValues[i],i+1, rawValues[i+1]);
+    	drawString(&screenBuff, fpsString, 0, i * 4, true);
   }
 #endif
   sendToScreen();
