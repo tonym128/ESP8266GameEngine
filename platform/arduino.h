@@ -22,7 +22,7 @@ bool readAnalogSensor(int pin)
   return inputVal > 20;
 }
 
-int readAnalogSensorRaw(int pint) {
+int readAnalogSensorRaw(int pin) {
   digitalWrite(pin, HIGH);
 
   inputVal = analogRead(A0);
