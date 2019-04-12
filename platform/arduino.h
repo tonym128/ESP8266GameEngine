@@ -171,10 +171,14 @@ void gameInit()
     pinMode(D6, OUTPUT);
     pinMode(D7, OUTPUT);
     pinMode(D8, OUTPUT);
+    pinMode(D2, OUTPUT);
+    pinMode(D3, OUTPUT);
     digitalWrite(D5, LOW);
     digitalWrite(D6, LOW);
     digitalWrite(D7, LOW);
     digitalWrite(D8, LOW);
+    digitalWrite(D2, LOW);
+    digitalWrite(D3, LOW);
 #else 
     // BSide Cape Town 2016 Badge
     pinMode(pinStcp, OUTPUT);
