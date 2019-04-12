@@ -252,7 +252,7 @@ void updateGame(GameState *gameState, ScreenBuff *screenBuff)
 				}
 				
 				if (maskCollisionCheck(gameState->player1.dim, gameState->asteroids[i].dim, rotShip, rotAst)) {
-						//gameState->player1.collision = true;
+						gameState->player1.collision = true;
 				}
 			}
 		}	

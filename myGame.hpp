@@ -51,7 +51,7 @@ struct GameState {
   int score = 0;
   int level = 1;
 
-  int scene = 3;
+  int scene = -1;
   int lastscene = -99;
   int frameCounter = 0;
 
