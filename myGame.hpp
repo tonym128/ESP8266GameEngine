@@ -9,6 +9,7 @@ static const int FIRECOUNT = 5;
 static const int FIREPACING = 100;
 static const FIXPOINT FIREPOWER = INT_TO_FIXP(1);
 static const int ASTEROIDS =  90;
+static const int SCORETIMEMULTTIMEOUT = 1000;
 
 struct Player1Keys {
   bool up = false;
@@ -50,11 +51,17 @@ struct GameState {
   int hiScore = 0;
   int score = 0;
   int level = 1;
-
   int scene = -1;
   int lastscene = -99;
   int frameCounter = 0;
 
+  // Scoring mechanism variables
+  int lastScore = 0;
+  int multiplier = 1;
+  int maxMultiplier = 5;
+  long scoreTimeMultiplier = getTimeInMillis()+SCORETIMEMULTTIMEOUT;
+
+  // Game mechanics
   Player1Keys p1keys;
   Player player1;
   Asteroid asteroids[ASTEROIDS];
